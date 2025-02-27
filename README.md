@@ -4,7 +4,7 @@ Others have, I'm sure, done this before, as have I, or at least the `hotFix()` f
 
 This small collection of functions basically allows me to 
 + make changes to a function in a package's source directory
-+ hot-swap changes to a function in an existing R session
++ hot-swap those changes to the function in an existing R session
   and have all the code use that updated function rather than
   the previously installed version.
   
@@ -16,9 +16,10 @@ This allows me to continue in an R session without having to
    + re-run code
    + load serialized data and then remove these intermediate files.
 
+Restoring this state can be quite involved and a distraction.
 
 
-hotFix() takes the name of a function (either as a string or a symbol) and then
+The primary function is `hotFix()` and it  takes the name of a function (either as a string or a symbol) and then
 + determines the package in which it is located
 + finds the source directory for that package
 + reads the functions in that package
@@ -27,15 +28,18 @@ hotFix() takes the name of a function (either as a string or a symbol) and then
    in the package's namespace and also on the search path if the function
    is exported.
 
-The function does not have to be exported from the package.
+The function being updated does not have to be exported from the package.
 
+One can specify the path to the package's source code in a call to `hotFix()`.
+However, it is more convenient to have the function figure this out. 
 
-The code determines the location of the source code for a package
+`hotFix()` and its helper functions  determine the location of the source code for a package
 by recursively searching for DESCRIPTION files in a set of identified directories where
-I tend to do development. Rather than search these each time, we build a character vector map of 
-directories, with the names being the package name.
+I tend to do development. Rather than search these each time, we build a character vector **map** of 
+directories, with the names being the package name, and we store this in an option in the R session.
+And since these don't change very often, we write this to a file so it is available in other R sessions.
 
-We do find duplicate directories for the same package.
+We do sometimes more than one R source code directory for the same package.
 This happens when we clone a repository, copy it for various reasons, ...
 When building the map, we resolve duplicates by keeping only the directory 
 which has the most recent time-stamp on any file in the packages R/ directory.
