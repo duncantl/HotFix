@@ -1,0 +1,7 @@
+importFrom(CodeAnalysis, getFunctionDefs)
+
+export(hotFix)
+export(mkMap, pkgMap)
+
+
+
