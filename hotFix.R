@@ -52,17 +52,23 @@ function(fn)
     
 }
 
+PackageDirectoryMapFile = "~/.R/PackageDirectoryMap.rds"
+
+pkgMap =
+function()
+    readRDS(PackageDirectoryMapFile)
+
 getPackageDir =
 function(pkg,
          map = getOption("PackageDirectoryMap", readRDS(rds)),
-         rds = "~/.R/PackageDirectoryMap.rds")    
+         rds = PackageDirectoryMapFile)    
 {
-#    message("locating source directory for ", pkg)
     map[pkg]
 }
 
 
 gitPkgs =
+    # Not used.
 function()    
 {
     pd = list.files("~/GitWorkingArea", full.names = TRUE)
@@ -91,6 +97,7 @@ function(dirs = PackageDirs,
          descriptions = lapply(dirs, findPackagesUnder))
 {
     desc = unlist(descriptions)
+    
     pkgNames = lapply(desc, function(x) try(pkgName(x), silent = TRUE))
     err = sapply(pkgNames, inherits, 'try-error')
     structure(dirname(desc[!err]), names = pkgNames[!err] )
@@ -99,5 +106,27 @@ function(dirs = PackageDirs,
 findPackagesUnder =
 function(dir)
 {
-   list.files(dir, pattern = "DESCRIPTION$", recursive = TRUE, full.names = TRUE)
+    desc = list.files(dir, pattern = "DESCRIPTION$", recursive = TRUE, full.names = TRUE)
+
+    dir = dirname(desc)
+    rex = file.exists(file.path(dir, "R"))
+    dex = file.exists(file.path(dir, "data"))
+    isRPkg = rex | dex
+    desc = desc[isRPkg]
+}
+
+
+mkMap = 
+function(pkgs = findPackages(),
+         out = PackageDirectoryMapFile,
+         option = !is.null(getOption("PackageDirectoryMap")))
+{
+    if(length(out) && !is.na(out))
+        saveRDS(pkgs, out)
+
+    # set the option?
+    if(option)
+        options(PackageDirectoryMap = pkgs)
+    
+    pkgs
 }
