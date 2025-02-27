@@ -1,10 +1,10 @@
 Package: HotFix
 Version: 0.1-0
-Title: Update function in loaded package with current code in package source.
+Title: Update function in loaded package with current code in package source
 Description: This is for dynamically updating a function in an installed and loaded package from its source code
    without re-installing the package and restarting an R session.
 Author: Duncan Temple Lang
 Maintainer: Duncan Temple Lang <dtemplelang@ucdavis.edu>
-License: BSD3
-Imports: CodeAnalysis
+License: BSD_3_clause + file LICENSE
+Imports: CodeAnalysis, utils
 
