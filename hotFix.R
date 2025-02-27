@@ -2,6 +2,10 @@ hotFix =
     # rf = list.files(srcDir, pattern = "\\.R$")
 function(fn, srcDir = "../R", pkg = "GSPAutoTest")
 {
+    fn0 = substitute(fn)
+    if(is.name(fn0))
+        fn = as.character(fn0)
+
     if(missing(srcDir)) {
         if(!missing(pkg))
             pkg0 = getPackageDir(pkg)
