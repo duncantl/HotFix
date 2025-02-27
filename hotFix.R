@@ -3,12 +3,12 @@ hotFix =
 function(fn, srcDir = "../R", pkg = "GSPAutoTest")
 {
     funs = CodeAnalysis::getFunctionDefs(srcDir)
-    fun = funs[[fn]]
+    fun2 = funs[[fn]]
     ns = getNamespace(pkg)
-    fun2 = eval(fun, ns)
+#    fun2 = eval(fun, ns)
     browser()
+    environment(fun2) = ns    
     if(fn %in% getNamespaceExports(ns)) {
-        environment(fun2) = ns
 
         pkg2 = paste0("package:", pkg)
         e = as.environment(pkg2)
