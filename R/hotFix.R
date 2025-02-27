@@ -70,20 +70,3 @@ function(pkg,
 {
     map[pkg]
 }
-
-
-
-
-########
-gitPkgs =
-    # Not used.
-function()    
-{
-    pd = list.files("~/GitWorkingArea", full.names = TRUE)
-    pd = pd[file.info(pd)$isdir]
-    desc = file.path(pd, "DESCRIPTION")
-
-    ex = file.exists(desc)
-    names = sapply(desc[ex], pkgName)
-    structure(desc[ex], names = unname(names))
-}
