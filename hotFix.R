@@ -67,18 +67,6 @@ function(pkg,
 }
 
 
-gitPkgs =
-    # Not used.
-function()    
-{
-    pd = list.files("~/GitWorkingArea", full.names = TRUE)
-    pd = pd[file.info(pd)$isdir]
-    desc = file.path(pd, "DESCRIPTION")
-
-    ex = file.exists(desc)
-    names = sapply(desc[ex], pkgName)
-    structure(desc[ex], names = unname(names))
-}
 
 pkgName =
 function(dir)
@@ -116,6 +104,14 @@ function(dir)
 }
 
 
+if(FALSE)
+{
+    # Now takes 23 seconds with the additional
+    # file checks for resolving duplicate directories for
+    # same package.
+    system.time(pkgs <- mkMap())
+}
+
 mkMap = 
 function(pkgs = findPackages(),
          out = PackageDirectoryMapFile,
@@ -129,4 +125,57 @@ function(pkgs = findPackages(),
         options(PackageDirectoryMap = pkgs)
     
     pkgs
+}
+
+if(FALSE) {
+    pkgs = mkMap()
+    g = split(pkgs, names(pkgs))
+    table(nels <- sapply(g, length))
+    # 669 but 164 have unique name
+    # rest have duplicates.
+    # Excluded some more. Down to 496 with 181 unique.
+    # The most is now 8 = pkgA
+
+    g2 = resolveDupPkgs(pkgs)
+    any(duplicated(names(g2))) == FALSE
+    is.character(g2)
+    any(duplicated(g2)) == FALSE
+}
+
+
+resolveDupPkgs =
+function(pkgs)
+{
+    tapply(pkgs, names(pkgs), resolveDupPkgLocation)
+}
+
+resolveDupPkgLocation =
+function(dirs)
+{
+    tm = sapply(file.path(dirs, "R"),  mostRecentTimeStamp)
+    dirs[which.max(tm)]
+}
+
+mostRecentTimeStamp =
+function(dir)
+{
+    info = file.info(list.files(dir, full.names = TRUE))
+    if(nrow(info) > 0)
+        max(unlist(info[, c("mtime", "ctime")]))
+    else
+        -1
+}
+
+########
+gitPkgs =
+    # Not used.
+function()    
+{
+    pd = list.files("~/GitWorkingArea", full.names = TRUE)
+    pd = pd[file.info(pd)$isdir]
+    desc = file.path(pd, "DESCRIPTION")
+
+    ex = file.exists(desc)
+    names = sapply(desc[ex], pkgName)
+    structure(desc[ex], names = unname(names))
 }
