@@ -13,7 +13,8 @@ function(fn, srcDir = "../R", pkg = "GSPAutoTest")
             pkg0 = findDir(fn)
         
         srcDir = file.path(pkg0, "R")
-    }
+        pkg = names(pkg0)
+    } 
     
     funs = CodeAnalysis::getFunctionDefs(srcDir)
     fun2 = funs[[fn]]
