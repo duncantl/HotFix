@@ -1,7 +1,9 @@
 importFrom(CodeAnalysis, getFunctionDefs)
+importFrom("utils", "find", "getAnywhere")
 
 export(hotFix)
-export(mkMap, pkgMap)
+export(mkMap, findPackages)
 
+export(pkgMap, getPackageDir)
 
 
