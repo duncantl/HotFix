@@ -82,21 +82,35 @@ PackageDirs = c("~/GitWorkingArea",
 
 findPackages =
 function(dirs = PackageDirs,
-         descriptions = lapply(dirs, findPackagesUnder))
+         descriptions = lapply(dirs, findPackagesUnder),
+         resolve = TRUE)
 {
     desc = unlist(descriptions)
     
     pkgNames = lapply(desc, function(x) try(pkgName(x), silent = TRUE))
     err = sapply(pkgNames, inherits, 'try-error')
-    structure(dirname(desc[!err]), names = pkgNames[!err] )
+    pkgs = structure(dirname(desc[!err]), names = pkgNames[!err] )
+    if(resolve)
+        pkgs = resolveDupPkgs(pkgs)
+
+    pkgs
 }
 
 findPackagesUnder =
-function(dir)
+    function(dir, exclude = c("~/Projects/R/", "CRAN/XML", "~/Projects/CompilingR-broken/", "~/Projects/RepRes/",
+                              "~/Projects/NIMBLE/"))
 {
     desc = list.files(dir, pattern = "DESCRIPTION$", recursive = TRUE, full.names = TRUE)
 
+    # was normalizePath but that requires actual files, not parts of paths such as CRAN/XML
+    # So use path.expand to replace ~
+    rx = paste(path.expand(exclude), collapse = "|")
+    desc = desc[!grepl(rx, desc)]
+
     dir = dirname(desc)
+    dir = dir[!grepl("_orig/?$", dir)]
+    dir = dir[!grepl("\\.Rcheck/", dir)]    
+    
     rex = file.exists(file.path(dir, "R"))
     dex = file.exists(file.path(dir, "data"))
     isRPkg = rex | dex
