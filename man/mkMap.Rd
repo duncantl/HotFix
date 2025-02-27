@@ -1,5 +1,6 @@
 \name{mkMap}
 \alias{mkMap}
+\alias{findPackages}
 \title{
 Compute a map of package source code directory and package name.
 }
@@ -20,19 +21,23 @@ Compute a map of package source code directory and package name.
 }
 \usage{
 mkMap(pkgs = findPackages(), out = PackageDirectoryMapFile, option = !is.null(getOption("PackageDirectoryMap")))
+findPackages(dirs = PackageDirs,
+             descriptions = lapply(dirs, findPackagesUnder),
+             resolve = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-\itemize{  
   \item{pkgs}{typically a call to \code{findPackages}}
   \item{out}{the name of the file to which to serialize the result.
    If this is empty or \code{NA}, the result is not written to a file.}
  \item{option}{ a scalar logical value controlling whether
-   the result is set as the session-level option \code{PackageDirectoryMap}.
- }
-}
-}
-\details{
+   the result is set as the session-level option \code{PackageDirectoryMap}.}
+ \item{dirs}{a character vector of directory paths in which to recursively search for R package sourc code}
+ \item{descriptions}{a list with an element for each directory search for R package source code.
+     Each element is a named character vector of directory names with the names being the package name.}
+ \item{resolve}{a scalar logical indicating whether
+   the function should resolve cases where there are multiple source directories
+   with the same package name.}
 }
 \value{
 A named character vector. See \code{\link{pkgMap}} for a description.
