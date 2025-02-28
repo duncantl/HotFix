@@ -16,9 +16,12 @@ function(dir)
 PackageDirs = c("~/GitWorkingArea",
                 "~/OGS/GradhubCode",
                 "~/OGS/Eforms",
-                "~/DSIProjects",
                 "~/Projects",
-                "~/DSI")
+                "~/DSIProjects",
+                "~/DSI",
+                "~/Books",
+                "~/Davis",
+                "~/Personal/Retirement")
 
 findPackages =
 function(dirs = PackageDirs,
@@ -38,7 +41,9 @@ function(dirs = PackageDirs,
 
 findPackagesUnder =
     function(dir, exclude = c("~/Projects/R/", "CRAN/XML", "~/Projects/CompilingR-broken/", "~/Projects/RepRes/",
-                              "~/Projects/NIMBLE/"))
+                              "~/Projects/NIMBLE/",
+                              "~/Books/ComputationalCaseStudies/SampleCode/github",
+                              "~/Books/NextLevelComputationalReasoning/SampleCode/github"))
 {
     desc = list.files(dir, pattern = "DESCRIPTION$", recursive = TRUE, full.names = TRUE)
 
