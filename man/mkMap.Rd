@@ -1,6 +1,7 @@
 \name{mkMap}
 \alias{mkMap}
 \alias{findPackages}
+\alias{updatePkgMap}
 \title{
 Compute a map of package source code directory and package name.
 }
@@ -24,6 +25,7 @@ mkMap(pkgs = findPackages(), out = PackageDirectoryMapFile, option = !is.null(ge
 findPackages(dirs = PackageDirs,
              descriptions = lapply(dirs, findPackagesUnder),
              resolve = TRUE)
+updatePkgMap(..., map = pkgMap(), out = PackageDirectoryMapFile, option = !is.null(getOption("PackageDirectoryMap")))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,6 +40,9 @@ findPackages(dirs = PackageDirs,
  \item{resolve}{a scalar logical indicating whether
    the function should resolve cases where there are multiple source directories
    with the same package name.}
+ \item{\dots}{collection of \code{pkgName = dirPath} values to insert into the map.}
+ \item{map}{the package-directory map, a character vector of package names and paths to the
+  package's source directory.}
 }
 \value{
 A named character vector. See \code{\link{pkgMap}} for a description.
