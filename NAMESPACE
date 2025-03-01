@@ -6,4 +6,5 @@ export(mkMap, findPackages)
 
 export(pkgMap, getPackageDir)
 
+export(updatePkgMap)
 
