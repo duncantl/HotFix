@@ -16,6 +16,7 @@ function(dir)
 PackageDirs = c("~/GitWorkingArea",
                 "~/OGS/GradhubCode",
                 "~/OGS/Eforms",
+                "~/OGS/Slate",
                 "~/Projects",
                 "~/DSIProjects",
                 "~/DSI",
